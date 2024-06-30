@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../models/task.dart';
+import '../../../providers/task_provider.dart';
+
+class TaskList extends StatelessWidget {
+  final List<Task> tasks;
+  final void Function(Task task)? onTap;
+
+  const TaskList({
+    super.key,
+    required this.tasks,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: const EdgeInsets.all(8.0),
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: tasks.length,
+      itemBuilder: (context, index) {
+        final task = tasks[index];
+        final id = index + 1;
+        return Container(
+          margin: const EdgeInsets.only(top: 10.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: ListTile(
+            leading: Text(
+              id.toString(),
+              style: const TextStyle(fontSize: 25),
+            ),
+            title: Text(
+              task.title,
+              maxLines: 1,
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+              ),
+            ),
+            subtitle: Text(
+              task.content,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 15,
+              ),
+            ),
+            trailing: Checkbox(
+              value: task.isCompleted,
+              onChanged: (bool? value) {
+                task.isCompleted = value!;
+                Provider.of<TaskProvider>(context, listen: false)
+                    .updateTask(task);
+              },
+            ),
+            onTap: () {
+              if (onTap != null) {
+                onTap!(task);
+              }
+            },
+          ),
+        );
+      },
+    );
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tasks_app/pages/home/widgets/task_list.dart';
 import 'package:tasks_app/providers/task_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -48,23 +49,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     child: Text('No tasks for this day'),
                   );
                 }
-                return ListView.builder(
-                  itemCount: tasks.length,
-                  itemBuilder: (context, index) {
-                    final task = tasks[index];
-                    return ListTile(
-                      title: Text(task.title),
-                      subtitle: Text(task.content),
-                      trailing: Checkbox(
-                        value: task.isCompleted,
-                        onChanged: (bool? value) {
-                          task.isCompleted = value!;
-                          taskProvider.updateTask(task);
-                        },
-                      ),
-                    );
-                  },
-                );
+                return TaskList(tasks: tasks);
               },
             ),
           ),
