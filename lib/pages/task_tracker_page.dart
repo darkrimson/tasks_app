@@ -11,17 +11,21 @@ class TaskTrackerPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Task Tracker'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Consumer<TaskProvider>(
-              builder: (context, taskProvider, child) {
-                final completedTasks = taskProvider.getCompletedTasks();
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Consumer<TaskProvider>(
+              builder: (context, provider, child) {
+                final completedTasks = provider.getCompletedTasks();
                 return Column(
                   children: [
-                    const Text('Completed Tasks',
-                        style: TextStyle(fontSize: 20)),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Completed Tasks',
+                          style: TextStyle(fontSize: 20)),
+                    ),
                     ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: completedTasks.length,
                       itemBuilder: (context, index) {
@@ -29,6 +33,13 @@ class TaskTrackerPage extends StatelessWidget {
                         return ListTile(
                           title: Text(task.title),
                           subtitle: Text(task.content),
+                          trailing: Checkbox(
+                            value: task.isCompleted,
+                            onChanged: (bool? value) {
+                              task.isCompleted = value!;
+                              provider.updateTask(task);
+                            },
+                          ),
                         );
                       },
                     ),
@@ -36,15 +47,18 @@ class TaskTrackerPage extends StatelessWidget {
                 );
               },
             ),
-          ),
-          Expanded(
-            child: Consumer<TaskProvider>(
-              builder: (context, taskProvider, child) {
-                final pendingTasks = taskProvider.getPendingTasks();
+            Consumer<TaskProvider>(
+              builder: (context, provider, child) {
+                final pendingTasks = provider.getPendingTasks();
                 return Column(
                   children: [
-                    const Text('Pending Tasks', style: TextStyle(fontSize: 20)),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child:
+                          Text('Pending Tasks', style: TextStyle(fontSize: 20)),
+                    ),
                     ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: pendingTasks.length,
                       itemBuilder: (context, index) {
@@ -56,7 +70,7 @@ class TaskTrackerPage extends StatelessWidget {
                             value: task.isCompleted,
                             onChanged: (bool? value) {
                               task.isCompleted = value!;
-                              taskProvider.updateTask(task);
+                              provider.updateTask(task);
                             },
                           ),
                         );
@@ -66,8 +80,8 @@ class TaskTrackerPage extends StatelessWidget {
                 );
               },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

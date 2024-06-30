@@ -14,7 +14,6 @@ class TaskProvider with ChangeNotifier {
 
   Future<void> _init() async {
     _taskBox = Hive.box<Task>('tasks');
-    await clearTaskOfPreviousDay();
     notifyListeners();
   }
 
@@ -45,16 +44,12 @@ class TaskProvider with ChangeNotifier {
     return _taskBox.values.where((task) => !task.isCompleted).toList();
   }
 
-  Future<void> clearTaskOfPreviousDay() async {
-    final now = DateTime.now();
-    final previousDay = DateTime(now.year, now.month, now.day - 1);
-    final tasksToDelete = _taskBox.values
-        .where((task) => task.date.isBefore(previousDay) && !task.isCompleted)
-        .toList();
-    for (final task in tasksToDelete) {
-      await task.delete();
-    }
-    notifyListeners();
+  List<Task> getPendingTasksByDate(DateTime date) {
+    return getTasksByDate(date).where((task) => !task.isCompleted).toList();
+  }
+
+  List<Task> getCompletedTasksByDate(DateTime date) {
+    return getTasksByDate(date).where((task) => task.isCompleted).toList();
   }
 
   bool isSameDay(DateTime date1, DateTime date2) {

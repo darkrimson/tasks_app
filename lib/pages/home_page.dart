@@ -8,6 +8,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime selectedDay = DateTime.now();
     final String formattedDate =
         DateFormat('yyyy-MM-dd').format(DateTime.now());
     return Scaffold(
@@ -15,28 +16,93 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         title: Text('Tasks $formattedDate'),
       ),
-      body: Consumer<TaskProvider>(
-        builder: (context, provider, child) {
-          return ListView.builder(
-            itemCount: provider.tasks.length,
-            itemBuilder: (context, index) {
-              final task = provider.tasks[index];
-              return ListTile(
-                title: Text(task.title),
-                subtitle: Text(task.content),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () {
-                    provider.deleteTask(task);
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Consumer<TaskProvider>(
+              builder: (context, provider, child) {
+                final tasks = provider.getPendingTasksByDate(selectedDay);
+                if (tasks.isEmpty) {
+                  return const Center(
+                    child: Text('No tasks for this day'),
+                  );
+                }
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: tasks.length,
+                  itemBuilder: (context, index) {
+                    final task = tasks[index];
+                    final id = index + 1;
+                    if (!task.isCompleted) {
+                      return ListTile(
+                        leading: Text(
+                          id.toString(),
+                          style: const TextStyle(fontSize: 25),
+                        ),
+                        title: Text(task.title),
+                        subtitle: Text(task.content),
+                        trailing: Checkbox(
+                          value: task.isCompleted,
+                          onChanged: (bool? value) {
+                            task.isCompleted = value!;
+                            provider.updateTask(task);
+                          },
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, '/task_detail',
+                              arguments: task);
+                        },
+                      );
+                    }
+                    return null;
                   },
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, '/task_detail', arguments: task);
-                },
-              );
-            },
-          );
-        },
+                );
+              },
+            ),
+            Consumer<TaskProvider>(
+              builder: (context, provider, child) {
+                final completedTasks =
+                    provider.getCompletedTasksByDate(selectedDay);
+                return Column(
+                  children: [
+                    completedTasks.isNotEmpty
+                        ? const Text('Completed Tasks',
+                            style: TextStyle(fontSize: 20))
+                        : const Divider(),
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: completedTasks.length,
+                      itemBuilder: (context, index) {
+                        final task = completedTasks[index];
+                        final id = index + 1;
+                        if (task.isCompleted) {
+                          return ListTile(
+                            leading: Text(
+                              id.toString(),
+                              style: const TextStyle(fontSize: 25),
+                            ),
+                            title: Text(task.title),
+                            subtitle: Text(task.content),
+                            trailing: Checkbox(
+                              value: task.isCompleted,
+                              onChanged: (bool? value) {
+                                task.isCompleted = value!;
+                                provider.updateTask(task);
+                              },
+                            ),
+                          );
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, '/task_detail'),
@@ -46,10 +112,10 @@ class HomePage extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             const DrawerHeader(
-              child: Text('Navigation'),
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
+              child: Text('Navigation'),
             ),
             ListTile(
               title: const Text('Calendar'),
