@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:tasks_app/pages/home/widgets/task_drawer.dart';
-import 'package:tasks_app/pages/home/widgets/task_list.dart';
-import '../../providers/task_provider.dart';
+import 'package:tasks_app/pages/widgets/task_drawer.dart';
+import 'package:tasks_app/pages/widgets/task_list.dart';
+import '../providers/task_provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 16.0),
                       child: Text(
                         'No tasks for this day',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 18),
                       ),
                     ),
                   );

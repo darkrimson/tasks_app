@@ -30,10 +30,4 @@ final ThemeData lightMode = ThemeData(
       foregroundColor: WidgetStateProperty.all(Colors.white),
     ),
   ),
-  drawerTheme: DrawerThemeData(
-    backgroundColor: Colors.white, // Фон для Drawer белый
-  ),
-  listTileTheme: const ListTileThemeData(
-    textColor: Colors.black, // Текст в Drawer черный
-  ),
 );

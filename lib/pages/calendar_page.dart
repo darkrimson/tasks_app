@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasks_app/pages/home/widgets/task_list.dart';
+import 'package:tasks_app/pages/widgets/task_list.dart';
 import 'package:tasks_app/providers/task_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -24,6 +24,10 @@ class _CalendarPageState extends State<CalendarPage> {
       body: Column(
         children: [
           TableCalendar(
+            headerStyle: const HeaderStyle(
+              formatButtonVisible: false,
+              titleCentered: true,
+            ),
             firstDay: DateTime.utc(2000, 1, 1),
             lastDay: DateTime.utc(2100, 1, 1),
             focusedDay: _focusedDay,

@@ -11,6 +11,7 @@ class TaskDetailPage extends StatelessWidget {
     final Task? task = ModalRoute.of(context)!.settings.arguments as Task?;
     final titleController = TextEditingController(text: task?.title ?? '');
     final contentController = TextEditingController(text: task?.content ?? '');
+    final provider = Provider.of<TaskProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -19,9 +20,9 @@ class TaskDetailPage extends StatelessWidget {
           if (task != null)
             IconButton(
               icon: const Icon(Icons.delete),
+              color: Colors.red,
               onPressed: () {
-                Provider.of<TaskProvider>(context, listen: false)
-                    .deleteTask(task);
+                provider.deleteTask(task);
                 Navigator.pop(context);
               },
             ),
@@ -51,9 +52,6 @@ class TaskDetailPage extends StatelessWidget {
                   return;
                 }
 
-                final taskProvider =
-                    Provider.of<TaskProvider>(context, listen: false);
-
                 if (task == null) {
                   final newTask = Task(
                     title: title,
@@ -61,11 +59,11 @@ class TaskDetailPage extends StatelessWidget {
                     createdAt: DateTime.now(),
                     date: DateTime.now(),
                   );
-                  taskProvider.addTask(newTask);
+                  provider.addTask(newTask);
                 } else {
                   task.title = title;
                   task.content = content;
-                  taskProvider.updateTask(task);
+                  provider.updateTask(task);
                 }
 
                 Navigator.pop(context);

@@ -37,7 +37,4 @@ final ThemeData darkMode = ThemeData(
       foregroundColor: WidgetStateProperty.all(Colors.black),
     ),
   ),
-  drawerTheme: DrawerThemeData(
-    backgroundColor: Colors.grey.shade700,
-  ),
 );
