@@ -56,7 +56,6 @@ class TaskDetailPage extends StatelessWidget {
                   final newTask = Task(
                     title: title,
                     content: content,
-                    createdAt: DateTime.now(),
                     date: DateTime.now(),
                   );
                   provider.addTask(newTask);

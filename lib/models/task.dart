@@ -11,18 +11,14 @@ class Task extends HiveObject {
   String content;
 
   @HiveField(2)
-  DateTime createdAt;
+  DateTime date;
 
   @HiveField(3)
-  DateTime date; // Добавлено свойство даты
-
-  @HiveField(4)
-  bool isCompleted = false; // Добавлено свойство для трекера задач
+  bool isCompleted = false;
 
   Task({
     required this.title,
     required this.content,
-    required this.createdAt,
     required this.date,
     this.isCompleted = false,
   });
