@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:tasks_app/pages/task_detail_page.dart';
+import 'package:tasks_app/providers/color_provider.dart';
+import 'package:tasks_app/providers/text_field_provider.dart';
 import 'package:tasks_app/themes/light_theme.dart';
 
 import 'models/task.dart';
@@ -24,8 +26,18 @@ class TasksApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TaskProvider>(
-      create: (context) => TaskProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => TaskProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ColorProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TextFieldProvider(),
+        ),
+      ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Tasks App',

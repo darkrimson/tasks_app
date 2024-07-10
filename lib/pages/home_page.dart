@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:tasks_app/pages/widgets/task_drawer.dart';
 import 'package:tasks_app/pages/widgets/task_list.dart';
+import 'package:tasks_app/providers/color_provider.dart';
 import '../providers/task_provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,6 +13,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime selectedDay = DateTime.now();
     final String formattedDate = DateFormat('MMMM d').format(DateTime.now());
+    final colorProvider = Provider.of<ColorProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -49,6 +51,7 @@ class HomePage extends StatelessWidget {
                 return TaskList(
                   tasks: tasks,
                   onTap: (task) {
+                    colorProvider.setSelectedColor(task.color);
                     Navigator.pushNamed(context, '/task_detail',
                         arguments: task);
                   },
@@ -84,7 +87,10 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/task_detail'),
+        onPressed: () {
+          colorProvider.clearSelectedColor();
+          Navigator.pushNamed(context, '/task_detail');
+        },
         shape: const CircleBorder(),
         child: const Icon(
           Icons.add,

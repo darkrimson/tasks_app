@@ -28,7 +28,7 @@ class TaskList extends StatelessWidget {
         return Container(
           margin: const EdgeInsets.only(top: 10.0),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: task.color,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Slidable(
@@ -47,23 +47,25 @@ class TaskList extends StatelessWidget {
             child: ListTile(
               leading: Text(
                 id.toString(),
-                style: const TextStyle(fontSize: 25),
+                style:
+                    const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
               title: Text(
                 task.title,
-                maxLines: 1,
+                maxLines: 2,
                 style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 22,
+                  overflow: TextOverflow.ellipsis,
+                  height: 1.2,
                 ),
               ),
               subtitle: Text(
                 task.content,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 15,
-                ),
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
               ),
               trailing: Checkbox(
                 value: task.isCompleted,

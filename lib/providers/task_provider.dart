@@ -12,7 +12,7 @@ class TaskProvider with ChangeNotifier {
     _init();
   }
 
-  Future<void> _init() async {
+  void _init() {
     _taskBox = Hive.box<Task>('tasks');
     notifyListeners();
   }
@@ -36,6 +36,10 @@ class TaskProvider with ChangeNotifier {
     return _taskBox.values.where((task) => isSameDay(task.date, date)).toList();
   }
 
+  List<Task> getCompletedTasksByDate(DateTime date) {
+    return getTasksByDate(date).where((task) => task.isCompleted).toList();
+  }
+
   List<Task> getCompletedTasks() {
     return _taskBox.values.where((task) => task.isCompleted).toList();
   }
@@ -46,10 +50,6 @@ class TaskProvider with ChangeNotifier {
 
   List<Task> getPendingTasksByDate(DateTime date) {
     return getTasksByDate(date).where((task) => !task.isCompleted).toList();
-  }
-
-  List<Task> getCompletedTasksByDate(DateTime date) {
-    return getTasksByDate(date).where((task) => task.isCompleted).toList();
   }
 
   bool isSameDay(DateTime date1, DateTime date2) {
